@@ -7,8 +7,9 @@ resource "helm_release" "fluxcd" {
   depends_on = [ null_resource.write_gke_context_to_file ]
 }
 
-resource "flux_bootstrap_git" "kube_prometheus" {
-  path = "./manifests/monitoring"
-  kustomization_override = file("${path.module}/kustomization.yaml")
-  depends_on = [ null_resource.write_gke_context_to_file ]
+resource "null_resource" "prom" {
+  depends_on = [module.gke_cluster]
+  provisioner "local-exec" {
+    command = "bash monitor.sh"
+  }
 }

@@ -12,14 +12,6 @@ provider "flux" {
   kubernetes = {
     config_path = "~/.kube/config"
   }
-  git = {
-    url = "https://github.com/dereban25/monitor.git"
-    branch = "main"
-    http = {
-      username = "dereban25"
-      password = "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"
-    }
-  }
 }
 terraform {
   required_providers {
