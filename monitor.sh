@@ -1,4 +1,5 @@
 #!/bin/bash
+kubectl apply -f https://github.com/open-telemetry/opentelemetry-operator/releases/latest/download/opentelemetry-operator.yaml
 
 flux create source git flux-monitoring \
   --interval=30m \
@@ -28,5 +29,14 @@ flux create kustomization monitoring-config \
   --prune=true \
   --source=flux-monitoring \
   --path="./manifests/monitoring/monitoring-config" \
+  --health-check-timeout=1m \
+  --wait
+
+flux create kustomization otel \
+  --depends-on=kube-prometheus-stack \
+  --interval=1h \
+  --prune=true \
+  --source=flux-monitoring \
+  --path="./manifests/monitoring/otel" \
   --health-check-timeout=1m \
   --wait
